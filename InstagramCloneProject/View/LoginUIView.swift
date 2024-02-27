@@ -102,7 +102,7 @@ struct LoginUIView: View {
 //                            }
                         
                         // MARK: - 로그인 버튼
-                        NavigationLink(destination: NextView()) {
+                        NavigationLink(destination: HomeView()) {
                                             Text("로그인")
                         }.frame(maxWidth: .infinity)
                         .padding()
@@ -110,7 +110,7 @@ struct LoginUIView: View {
                         .background(viewModel.formIsValid ? Color(UIColor(hexString: "00A3FF")) : Color(UIColor(hexString: "00A3FF")).opacity(0.7))
                         .foregroundColor(.white)
                         .cornerRadius(10)
-                        .disabled(!viewModel.formIsValid)
+                        //.disabled(!viewModel.formIsValid)
                         
                         // MARK: - 로그인 버튼 하단 텍스트
 

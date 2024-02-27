@@ -33,8 +33,6 @@ class LoginViewModel: ObservableObject {
     deinit {
         publishers.forEach { $0.cancel() }
      }
-    
-
 }
 
 

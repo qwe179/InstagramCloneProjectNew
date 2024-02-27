@@ -18,6 +18,7 @@ struct FirstView: View {
                 VStack {
                     Toggle("다크모드", isOn: $isToggled)
                         .padding()
+                    
                         .onChange(of: isToggled) { newValue in
                             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                             windowScene?.windows.first?.rootViewController?.overrideUserInterfaceStyle = newValue ? .dark : .light
