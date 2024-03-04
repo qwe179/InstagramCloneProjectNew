@@ -59,10 +59,6 @@ struct FeedView: View {
                             viewModel.originOffset = 141
                             viewModel.offset = 141
                         }
-                        print("viewModel.offset:",viewModel.offset)
-                        print("viewModel.originOffset:",viewModel.originOffset)
-
-                        print("fadeOutRatio::",fadeOutRatio)
                         
                         if viewModel.offset == viewModel.originOffset {
                             self.fadeOutRatio = 1
@@ -73,7 +69,6 @@ struct FeedView: View {
 //                            //0.1
 //                        }
                         self.fadeOutRatio = (viewModel.offset - viewModel.originOffset) / 50 + 1
-                        print("calcul!!!!",viewModel.offset - viewModel.originOffset)
                         //self.fadeOutRatio =  (viewModel.offset - viewModel.originOffset)
                         
                         

@@ -34,12 +34,7 @@ class URLImageLoader: ObservableObject {
             .store(in: &cancellables)
     }
 
-    init() {
-        print("URLImageLoader initialized")
-    }
-
     deinit {
-        print("URLImageLoader deinitialized")
         cancellables.forEach { $0.cancel() }
     }
 }
