@@ -187,6 +187,7 @@ struct ListView: View {
         VStack {
             HStack {
                 KFImage(ImageUrls[0])
+                    .cancelOnDisappear(true) //셀이 화면 밖에 있을 때는 다운로드 취소
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 32,height: 32)
@@ -207,7 +208,7 @@ struct ListView: View {
                 TabView(selection: $tabIndex){
                         ForEach(ImageUrls.indices,id: \.self){ index in
                                 KFImage(ImageUrls[index])
-                            
+                                    .cancelOnDisappear(true) //셀이 화면 밖에 있을 때는 다운로드 취소
 //                                Image(images[index])
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)

@@ -9,6 +9,9 @@ import Foundation
 import SwiftUI
 struct Someone {
     var name: String
-    var imageURLs: [String?] = []
+    var contents: String
+    var imageURLs: [URL?]
     var location: String?
+    var numberOfLike: Int
+    
 }
