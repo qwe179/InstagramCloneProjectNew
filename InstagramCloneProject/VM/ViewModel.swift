@@ -16,7 +16,6 @@ final class ViewModel: ObservableObject {
      var isCheckedOriginOffset: Bool = false
     
     func setOriginOffset(_ offset: CGFloat) {
-        print("================================")
         guard !isCheckedOriginOffset else { return }
         self.originOffset = offset
         self.offset = offset
