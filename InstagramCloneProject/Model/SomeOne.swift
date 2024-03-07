@@ -7,11 +7,16 @@
 
 import Foundation
 import SwiftUI
-struct Someone {
+struct SomeOne: Equatable {
     var name: String
     var contents: String
     var imageURLs: [URL?]
-    var location: String?
+    var location: String
     var numberOfLike: Int
+    var profilePhoto: URL
+    
+    static func == (lhs: SomeOne, rhs: SomeOne) -> Bool {
+        return lhs.name == rhs.name
+    }
     
 }

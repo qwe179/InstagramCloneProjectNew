@@ -8,6 +8,7 @@
 import SwiftUI
 import BriefPagingControl
 import Kingfisher
+import SwiftUIModal
 @_spi(Advanced) import SwiftUIIntrospect
 
 
@@ -15,8 +16,7 @@ struct FeedView: View {
     @StateObject private var viewModel: ViewModel = ViewModel()
     @State private var isFadeOut = false
     @State private var fadeOutRatio:CGFloat = 1
-    @State private var offsetFlag = false
-
+    @ObservedObject var feedManager = FeedManager.shared
     
     init() {
         // MARK: - 스크롤 튕기는거 off
@@ -25,35 +25,34 @@ struct FeedView: View {
     var body: some View {
         VStack {
             ZStack {
-                
-                
                 List{
                     Color.clear
                         .frame(height: 50)
-                    
                     ZStack {
                         scrollObservableView
-                        ExtractedView().listRowInsets(EdgeInsets()).listRowSeparator(.hidden)
+                        CollectionView().listRowInsets(EdgeInsets()).listRowSeparator(.hidden)
                     }.listRowInsets(EdgeInsets())
-                    
-                    ListView()
-                        .listRowInsets(EdgeInsets())
-                        .listRowSeparator(.hidden)
+                    // MARK: - 인간수만큼 생성
+                   // imageUrls = one.
+                    ForEach(0...feedManager.feedCounts - 1, id: \.self) { count in
+                      //  ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 })
+                        ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 }, user: feedManager.feed[count])
+                            .listRowInsets(EdgeInsets())
+                            .listRowSeparator(.hidden)
+                    }
+                  
                 }.listStyle(PlainListStyle())
                     .onPreferenceChange(ScrollOffsetKey.self) {
                         viewModel.setOffset($0)
                         
-                        if  viewModel.direct == .up {
+                        if  viewModel.direct == .down {
                             if viewModel.originOffset - viewModel.offset < 0 {
                                 viewModel.originOffset = viewModel.offset
                             }
-                        }else if viewModel.direct == .down {
+                        }else if viewModel.direct == .up {
                             if viewModel.originOffset - viewModel.offset > 100 {
                                 viewModel.originOffset = viewModel.offset + 100
                             }
-                                //if viewModel.or
-  
-
                         }
                         if viewModel.originOffset > 141 {
                             viewModel.originOffset = 141
@@ -64,13 +63,7 @@ struct FeedView: View {
                             self.fadeOutRatio = 1
       
                         }
-//                        if viewModel.offset < viewModel.originOffset {
-//                           
-//                            //0.1
-//                        }
                         self.fadeOutRatio = (viewModel.offset - viewModel.originOffset) / 50 + 1
-                        //self.fadeOutRatio =  (viewModel.offset - viewModel.originOffset)
-                        
                         
                     }
                 // }
@@ -94,23 +87,18 @@ struct FeedView: View {
                     .padding(.leading)
                     .padding(.trailing)
                     .frame(width: UIScreen.main.bounds.width,height: 90)
-                    
                     .background(.white)
-                   
-                    //            Divider()
                     Spacer()
-                }//왜 값이 30이냐면...나도모름
-                //.position(x: UIScreen.main.bounds.width / 2, y: 0)
-                .ignoresSafeArea()
+                }
                 .offset(y: {
                     if viewModel.offset - viewModel.originOffset > 0 {
                         return 0 //최대 0
                     }else {
-                        return viewModel.offset - viewModel.originOffset} }())
-            
-             //   .offset(y:viewModel.offset - viewModel.originOffset < 32 ?  viewModel.offset - viewModel.originOffset-32 : 0 )
+                        print("현재 오프셋2:",viewModel.offset - viewModel.originOffset)
+                        return viewModel.offset - viewModel.originOffset
+                    } }())
                 .opacity(fadeOutRatio)
-                
+                .ignoresSafeArea()
             }
  
         }
@@ -176,58 +164,87 @@ struct UserView: View {
 
 struct ListView: View {
  
-    @ObservedObject var urlImageLoader = URLImageLoader()
+  //  @ObservedObject var urlImageLoader = URLImageLoader()
+    @State private var isModalPresented = false
+    @State private var settingsDetent = false
+    @State private var temp = 0
     @State var offset:CGFloat = 0
     @State var tabIndex = 0
-    @State private var temp = 0
-    let ImageUrls:[URL] = [URL(string: "https://randomuser.me/api/portraits/men/50.jpg")!,
-                           URL(string: "https://mblogthumb-phinf.pstatic.net/MjAxOTA1MDdfMjc1/MDAxNTU3MjE5MTgzMjY5.DQwQpQFlVNGMsF0xgb8CnD0ZxU6eUcXt7gfBPqinEkMg.NoSOhwRQP5FlCP3UIjaGonLyXc-gphDAsaZvdK0au1sg.PNG.cine_play/%ED%94%BC%EC%B9%B4%EC%B8%842.png?type=w800")! ]
+    //@State var one: SomeOne
+    @State var imageUrls: [URL]
+    @State var user: SomeOne
     private let images = ["test", "chichi","test2", "test3", "test4", "test5"]
     var body: some View {
         VStack {
             HStack {
-                KFImage(ImageUrls[0])
+                KFImage(user.profilePhoto)
                     .cancelOnDisappear(true) //셀이 화면 밖에 있을 때는 다운로드 취소
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 32,height: 32)
                     .clipShape(Circle())
                 VStack(alignment:.leading,spacing: 0){
-                    Text("Comong")
+                    Text(user.name)
                     HStack {
-                        Text("Incheon, korea")
+                        Text(user.location)
                         Image("checkIcon")
                     }
-                    
                 }
                 Spacer()
                 Image(.moreIcon)
             }.padding()
-
             VStack {
                 TabView(selection: $tabIndex){
-                        ForEach(ImageUrls.indices,id: \.self){ index in
-                                KFImage(ImageUrls[index])
+                        ForEach(imageUrls.indices,id: \.self){ index in
+                                KFImage(imageUrls[index])
                                     .cancelOnDisappear(true) //셀이 화면 밖에 있을 때는 다운로드 취소
 //                                Image(images[index])
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(minHeight: 2000)
+                                    .frame(minHeight: 400)
                                
                         }
-                }
+                }.frame(minHeight: 400)
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode:.never))
                 HStack{
-                    HStack {
+                    Button(action: { }){
                         Image(.heart)
+                    }
+                    Button(action: {
+                        isModalPresented.toggle()
+                    }){
                         Image(.comment)
+                    }
+                    .bottomSheet(isPresented: $isModalPresented) {
+                        CommentView()
+                            .frame(maxHeight: UIScreen.main.bounds.height)
+                            .cornerRadius(10)
+                    }
+                    .bottomSheetConfiguration(
+                        .init(
+                            dismissRatio: 0.5,
+                            maxOverDrag: 0,
+                            background: {  AnyView(RoundedRectangle(cornerRadius: 10).fill(Color.white)) },
+                            dim: { Color.black.opacity(0.6) },
+                            indicator: {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(.gray)
+                                    .frame(width: 50, height: 5).padding()
+                            }
+                        )
+                    )
+                    Button(action: { }){
                         Image(.dm)
                     }
                     Spacer()
-                    Image(.save)
-                }.padding()
+                    Button(action: { }){
+                        Image(.save)
+                    }
+                }.padding(.leading)
+                 .padding(.trailing)
+                 .buttonStyle(PlainButtonStyle())
                 .overlay {
-                    BriefPagingControl(numberOfPages: ImageUrls.count, currentPage: $tabIndex) { config in
+                    BriefPagingControl(numberOfPages: imageUrls.count, currentPage: $tabIndex) { config in
                         config.indicatorSize = 10
                         config.spacing = 10
                         config.currentIndicatorColor = .blue
@@ -237,10 +254,21 @@ struct ListView: View {
                         config.animation = .snappy
                     }
                 }
-            }.frame(minHeight: 400,maxHeight: 500)
-            //.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                HStack{
+                    Text("좋아요")
+                    Text("\(user.numberOfLike)개")
+                    
+                    Spacer()
+                }.padding(.leading)
+                HStack{
+                    Text(user.name)
+                    Text(user.contents)
+                    Spacer()
+                }.padding(.leading)
+            }
             
         }.onAppear{
+           // imageUrls = one.imageURLs.compactMap { $0 }
         }
     }
 }
@@ -252,33 +280,39 @@ struct ListView: View {
     FeedView()
 }
 
-struct ExtractedView: View {
+struct CollectionView: View {
+    @ObservedObject var storyManager = StoryManager.shared
     let data = (1...20).map { $0 }
     var columns: [GridItem] = [
            GridItem(.flexible(minimum: 10,maximum: 80))
        ]
     var body: some View {
         VStack {
-//            VStack {
-//                HStack() {
-//                    Image("camera")
-//                    Spacer()
-//                    Image("instagramLogoWhite").resizable().aspectRatio(contentMode: .fit)
-//                        .frame(width: 105)
-//                    Spacer()
-//                    Image("dm")
-//                }
-//                .padding(.top)
-//                .padding(.leading)
-//                .padding(.trailing)
-//            Divider()
-//            }
-     
-            
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHGrid(rows: columns, spacing: 20) {
-                    ForEach(data, id: \.self) { item in
-                        UserView(title: "\(item)")
+                    ForEach(0..<storyManager.storyCount, id: \.self) { index in
+                        //UserView(title: "\(item)")
+                        VStack {
+                            VStack {
+                                KFImage(storyManager.stories[index].profilePhoto)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .clipShape(Circle())
+                                    .overlay{
+                                        Circle().stroke(.white, lineWidth: 8)
+                                    }
+                                    .overlay {
+                                        Circle().stroke(  LinearGradient(gradient: Gradient(colors: [.red, .yellow, .purple]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
+                                    }
+                            }
+                            .frame(width: 62, height: 62)
+                            VStack {
+                                Text(storyManager.stories[index].name)
+                            }
+                            .frame(height: 14)
+                        }
+                        
+                        
                     }
                 }
                 .padding()
