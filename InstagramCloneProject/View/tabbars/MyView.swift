@@ -9,7 +9,14 @@ import SwiftUI
 
 struct MyView: View {
     var body: some View {
-        Text("Hello, Comong!")
+        NavigationView {
+            // Your navigation view content goes here
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Text("Button")
+             }
+         }
     }
 }
 

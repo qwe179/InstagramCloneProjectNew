@@ -28,26 +28,34 @@ final class StoryManager: ObservableObject {
         ]
         storyCount = self.stories.count
         // MARK: - 데이터 새로 가져오는 새로고침 이벤트 구독
-        NotificationCenter.default.publisher(for: .customEvent)
-            .sink { [weak self] _ in
-                self?.fetchData()
-            }
-            .store(in: &publishers)
+//        NotificationCenter.default.publisher(for: .customEvent)
+//            .sink { [weak self] _ in
+//                self?.fetchData()
+//            }
+//            .store(in: &publishers)
     }
     deinit {
         publishers.forEach { $0.cancel() }
      }
     
-    func fetchData() {
-        self.stories.removeAll()
-        // 여기에서 데이터를 가져오는 비동기 동작 수행
-        // 가져온 데이터는 @Published로 선언한 프로퍼티에 할당되어 UI에 업데이트될 것
-        self.stories = [
-            Story(name: "test5", profilePhoto:        URL(string:"https://images.pexels.com/photos/2859616/pexels-photo-2859616.jpeg?cs=srgb&dl=pexels-barcelosfotos-2859616.jpg&fm=jpg")!, time: "4시간"),
-            Story(name: "test6", profilePhoto: URL(string:"https://img.allurekorea.com/allure/2023/08/style_64e9455e27b2a-560x700.jpeg")!, time: "5시간"),
-            Story(name: "test7", profilePhoto: URL(string:"https://img.kbs.co.kr/kbs/620/news.kbs.co.kr/data/fckeditor/new/image/2021/01/25/323431611532663178.jpg")!, time: "6시간")
-        ]
-        self.storyCount = self.stories.count
+    func fetchData()  {
+     //   DispatchQueue.main.async {
+            
+            self.stories.removeAll()
+            // 여기에서 데이터를 가져오는 비동기 동작 수행
+            // 가져온 데이터는 @Published로 선언한 프로퍼티에 할당되어 UI에 업데이트될 것
+            self.stories = [
+                Story(name: "test5", profilePhoto:        URL(string:"https://images.pexels.com/photos/2859616/pexels-photo-2859616.jpeg?cs=srgb&dl=pexels-barcelosfotos-2859616.jpg&fm=jpg")!, time: "4시간"),
+                Story(name: "test6", profilePhoto: URL(string:"https://img.allurekorea.com/allure/2023/08/style_64e9455e27b2a-560x700.jpeg")!, time: "5시간"),
+                Story(name: "test7", profilePhoto: URL(string:"https://img.kbs.co.kr/kbs/620/news.kbs.co.kr/data/fckeditor/new/image/2021/01/25/323431611532663178.jpg")!, time: "6시간"),
+                Story(name: "test7", profilePhoto: URL(string:"https://img.kbs.co.kr/kbs/620/news.kbs.co.kr/data/fckeditor/new/image/2021/01/25/323431611532663178.jpg")!, time: "6시간"),
+                Story(name: "test7", profilePhoto: URL(string:"https://img.kbs.co.kr/kbs/620/news.kbs.co.kr/data/fckeditor/new/image/2021/01/25/323431611532663178.jpg")!, time: "6시간"),
+                Story(name: "test7", profilePhoto: URL(string:"https://img.kbs.co.kr/kbs/620/news.kbs.co.kr/data/fckeditor/new/image/2021/01/25/323431611532663178.jpg")!, time: "6시간"),
+                Story(name: "test7", profilePhoto: URL(string:"https://img.kbs.co.kr/kbs/620/news.kbs.co.kr/data/fckeditor/new/image/2021/01/25/323431611532663178.jpg")!, time: "6시간")
+            ]
+            self.storyCount = self.stories.count
+     //   }
+ 
         
     }
     

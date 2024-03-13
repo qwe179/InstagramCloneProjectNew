@@ -13,6 +13,7 @@ import SwiftUIModal
 
 
 struct FeedView: View {
+    @ObservedObject var storyManager = StoryManager.shared
     @StateObject private var viewModel: ViewModel = ViewModel()
     @State private var isFadeOut = false
     @State private var fadeOutRatio:CGFloat = 1
@@ -24,83 +25,52 @@ struct FeedView: View {
     }
     var body: some View {
         VStack {
-            ZStack {
-                List{
-                    Color.clear
-                        .frame(height: 50)
-                    ZStack {
-                        scrollObservableView
-                        CollectionView().listRowInsets(EdgeInsets()).listRowSeparator(.hidden)
-                    }.listRowInsets(EdgeInsets())
-                    // MARK: - 인간수만큼 생성
-                   // imageUrls = one.
-                    ForEach(0...feedManager.feedCounts - 1, id: \.self) { count in
-                      //  ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 })
-                        ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 }, user: feedManager.feed[count])
-                            .listRowInsets(EdgeInsets())
-                            .listRowSeparator(.hidden)
-                    }
-                  
-                }.listStyle(PlainListStyle())
-                    .onPreferenceChange(ScrollOffsetKey.self) {
-                        viewModel.setOffset($0)
-                        
-                        if  viewModel.direct == .down {
-                            if viewModel.originOffset - viewModel.offset < 0 {
-                                viewModel.originOffset = viewModel.offset
-                            }
-                        }else if viewModel.direct == .up {
-                            if viewModel.originOffset - viewModel.offset > 100 {
-                                viewModel.originOffset = viewModel.offset + 100
-                            }
-                        }
-                        if viewModel.originOffset > 141 {
-                            viewModel.originOffset = 141
-                            viewModel.offset = 141
-                        }
-                        
-                        if viewModel.offset == viewModel.originOffset {
-                            self.fadeOutRatio = 1
-      
-                        }
-                        self.fadeOutRatio = (viewModel.offset - viewModel.originOffset) / 50 + 1
-                        
-                    }
-                // }
-                //                .introspect(.list, on: .iOS(.v16, .v17)) { collectionView in
-                //                    collectionView.backgroundView = UIView()
-                //                    collectionView.subviews.dropFirst(1).first?.backgroundColor = .cyan
-                //                    collectionView.bounces = true
-                //                }
-                    .background(.clear)
-                
-                VStack {
-                    HStack() {
-                        Image("camera")
-                        Spacer()
-                        Image("instagramLogoWhite").resizable().aspectRatio(contentMode: .fit)
-                            .frame(width: 105)
-                        Spacer()
-                        Image("dm")
-                    }
-                    .padding(.top,40)
-                    .padding(.leading)
-                    .padding(.trailing)
-                    .frame(width: UIScreen.main.bounds.width,height: 90)
-                    .background(.white)
-                    Spacer()
+//                VStack {
+//                    HStack() {
+//                        Image("camera")
+//                        Spacer()
+//                        Image("instagramLogoWhite").resizable().aspectRatio(contentMode: .fit)
+//                            .frame(width: 105)
+//                        Spacer()
+//                        Image("dm")
+//                    }
+//                    .padding(.top,40)
+//                    .padding(.leading)
+//                    .padding(.trailing)
+//                    .frame(width: UIScreen.main.bounds.width,height: 90)
+//                    .background(.white)
+//                }
+//                .ignoresSafeArea()
+
+            List{
+                ZStack {
+                    scrollObservableView
+                    CollectionView().listRowInsets(EdgeInsets()).listRowSeparator(.hidden)
+                }.listRowInsets(EdgeInsets())
+                // MARK: - 인간수만큼 생성
+                // imageUrls = one.
+                ForEach(0...feedManager.feedCounts - 1, id: \.self) { count in
+                    //  ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 })
+                    ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 }, user: feedManager.feed[count])
+                        .listRowInsets(EdgeInsets())
+                        .listRowSeparator(.hidden)
                 }
-                .offset(y: {
-                    if viewModel.offset - viewModel.originOffset > 0 {
-                        return 0 //최대 0
-                    }else {
-                        print("현재 오프셋2:",viewModel.offset - viewModel.originOffset)
-                        return viewModel.offset - viewModel.originOffset
-                    } }())
-                .opacity(fadeOutRatio)
-                .ignoresSafeArea()
-            }
- 
+                
+            }.listStyle(PlainListStyle())
+                .refreshable {
+                    //NotificationCenter.default.post(name: .customEvent, object: nil)
+                    do {
+                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                        storyManager.fetchData()
+                    } catch {
+                        
+                    }
+                }
+                .onPreferenceChange(ScrollOffsetKey.self) {
+                    _ in
+                }
+                .background(.clear)
+  
         }
     }
     
@@ -266,6 +236,7 @@ struct ListView: View {
                     Spacer()
                 }.padding(.leading)
             }
+            Divider()
             
         }.onAppear{
            // imageUrls = one.imageURLs.compactMap { $0 }
@@ -321,8 +292,10 @@ struct CollectionView: View {
             }
             Divider()
         }       .onAppear {
+    
           //  UIScrollView.appearance().bounces = false
         
         }
+  
     }
 }
