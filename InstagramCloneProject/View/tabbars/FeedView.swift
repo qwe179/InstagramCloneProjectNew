@@ -136,7 +136,11 @@ struct ListView: View {
  
   //  @ObservedObject var urlImageLoader = URLImageLoader()
     @State private var isModalPresented = false
+    @State private var isDmPressed = false
+    @State private var isHeartPressed = false
+    @State private var isSavePressed = false
     @State private var settingsDetent = false
+    @State private var detents: PresentationDetent = .medium
     @State private var temp = 0
     @State var offset:CGFloat = 0
     @State var tabIndex = 0
@@ -177,8 +181,16 @@ struct ListView: View {
                 }.frame(minHeight: 400)
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode:.never))
                 HStack{
-                    Button(action: { }){
-                        Image(.heart)
+                    
+                    Button(action: {
+                        isHeartPressed.toggle()
+                    }){
+                       // Image(.heart)
+                        Image(isHeartPressed ? "heart.fill" : "heart")
+                            .frame(width: 25,height: 20)
+//                        .scaleEffect(1.5)
+//                            .foregroundColor(isHeartPressed ? .red : .black)
+                            
                     }
                     Button(action: {
                         isModalPresented.toggle()
@@ -203,12 +215,31 @@ struct ListView: View {
                             }
                         )
                     )
-                    Button(action: { }){
+                    Button(action: {
+                        isDmPressed.toggle()
+                    }){
                         Image(.dm)
                     }
+                    .sheet(isPresented: $isDmPressed, content: {
+                        DmView(detents: $detents)
+                            .presentationDetents([.medium,.large], selection: $detents)
+                            
+                        //DmView()
+                            .cornerRadius(10)
+                           // .presentationDetents([.medium,.large])
+                          //  .presentationDetents(isLargeDetent ? [.large,.large] : [.medium,.large])
+                            
+
+                    })
+              
                     Spacer()
-                    Button(action: { }){
-                        Image(.save)
+                    Button(action: { 
+                        isSavePressed.toggle()
+                    }){
+                        Image(isSavePressed ? "save.fill" : "Save")
+                            .frame(width: 10,height: 10)
+                       // Image(.save)
+                        //Image("Save")
                     }
                 }.padding(.leading)
                  .padding(.trailing)

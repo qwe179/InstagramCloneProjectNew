@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
+import UIKit
+import AVFoundation
 
 struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var hideNavBar:Bool = true
+    @State private var showCameraView = false
+    @State private var selectedImage: UIImage = UIImage(named: "chichi")!
     var body: some View {
         ZStack(){
             NavigationView{
@@ -25,7 +29,18 @@ struct HomeView: View {
                     ToolbarItem(placement: .navigation) {
                         VStack {
                             HStack() {
-                                Image("camera")
+                                Button(action: {
+                                    self.showCameraView.toggle()
+                                }){
+                                    Image("camera")
+                                }
+                                // MARK: - 풀스크린하려면 .fullScreenCover 해야함.. .sheet 말고..
+
+                                .fullScreenCover(isPresented: $showCameraView, content: {
+                                    ImagePicker(image: $selectedImage, isActive: $showCameraView)
+                                        .edgesIgnoringSafeArea(.all)
+                                })
+                                
                                 Spacer()
                                 Image("instagramLogoWhite").resizable().aspectRatio(contentMode: .fit)
                                     .frame(width: 105)
@@ -43,6 +58,9 @@ struct HomeView: View {
             }
             
         }.navigationBarHidden(true)
+            .onAppear {
+
+            }
     }
 }
 
