@@ -41,7 +41,9 @@ private struct NavigationControllerExtractor: UIViewRepresentable {
     var isHidden: Bool?
     // MARK: - 빈 UIView 생성하는 메서드
     func makeUIView(context: Context) -> UIView {
-        return UIView()
+     let a = UIView()
+            a.backgroundColor = .white
+        return a
     }
     
     // MARK: - 뷰가 업데이트될 때 호출된다
@@ -53,10 +55,15 @@ private struct NavigationControllerExtractor: UIViewRepresentable {
                     // MARK: - 네비게이션컨트롤러의 하이드바온스와이프 속성 사용
                     parentController.navigationController?.hidesBarsOnSwipe = isHidden
                     parentController.navigationController?.navigationBar.barTintColor = UIColor.white
-                  //  parentController.navigationController?.tabBarController?.tabBar.tintColor = .black
+                 //   parentController.navigationController?.navigationBar.barTintColor = UIColor.black
+                  
+       
+                //    parentController.navigationController?.tabBarController?.tabBar.backgroundColor = .black
+                    parentController.tabBarController?.tabBar.backgroundColor = .white
                 }
                 //print("isHidden::",isHidden)
             }
+ 
         }
     }
 }

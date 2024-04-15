@@ -18,65 +18,85 @@ struct FeedView: View {
     @State private var isFadeOut = false
     @State private var fadeOutRatio:CGFloat = 1
     @ObservedObject var feedManager = FeedManager.shared
-    
+    @State private var hideNavBar:Bool = true
+    @State private var showCameraView = false
+    @State private var selectedImage: UIImage = UIImage(named: "chichi")!
     init() {
         // MARK: - 스크롤 튕기는거 off
-     //  UIScrollView.appearance().bounces = false
+        //  UIScrollView.appearance().bounces = false
     }
     var body: some View {
-        VStack {
-//                VStack {
-//                    HStack() {
-//                        Image("camera")
-//                        Spacer()
-//                        Image("instagramLogoWhite").resizable().aspectRatio(contentMode: .fit)
-//                            .frame(width: 105)
-//                        Spacer()
-//                        Image("dm")
-//                    }
-//                    .padding(.top,40)
-//                    .padding(.leading)
-//                    .padding(.trailing)
-//                    .frame(width: UIScreen.main.bounds.width,height: 90)
-//                    .background(.white)
-//                }
-//                .ignoresSafeArea()
-
-            List{
-                ZStack {
-                    scrollObservableView
-                    CollectionView().listRowInsets(EdgeInsets()).listRowSeparator(.hidden)
-                }.listRowInsets(EdgeInsets())
-                // MARK: - 인간수만큼 생성
-                // imageUrls = one.
-                ForEach(0...feedManager.feedCounts - 1, id: \.self) { count in
-                    //  ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 })
-                    ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 }, user: feedManager.feed[count])
-                        .listRowInsets(EdgeInsets())
-                        .listRowSeparator(.hidden)
-                }
-                
-            }.listStyle(PlainListStyle())
-                .refreshable {
-                    //NotificationCenter.default.post(name: .customEvent, object: nil)
-                    do {
-                        try await Task.sleep(nanoseconds: 1_000_000_000)
-                        storyManager.fetchData()
-                    } catch {
-                        
+        NavigationView{
+            VStack {
+                List{
+                    ZStack {
+                        scrollObservableView
+                        CollectionView().listRowInsets(EdgeInsets()).listRowSeparator(.hidden)
+                    }.listRowInsets(EdgeInsets())
+                    // MARK: - 인간수만큼 생성
+                    // imageUrls = one.
+                    ForEach(0...feedManager.feedCounts - 1, id: \.self) { count in
+                        //  ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 })
+                        ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 }, user: feedManager.feed[count])
+                            .listRowInsets(EdgeInsets())
+                            .listRowSeparator(.hidden)
                     }
+                    
+                }.listStyle(PlainListStyle())
+                    .refreshable {
+                        //NotificationCenter.default.post(name: .customEvent, object: nil)
+                        do {
+                            try await Task.sleep(nanoseconds: 1_000_000_000)
+                            storyManager.fetchData()
+                        } catch {
+                            
+                        }
+                    }
+                    .onPreferenceChange(ScrollOffsetKey.self) {
+                        _ in
+                    }
+                    .background(.clear)
+                
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigation) {
+                    VStack {
+                        HStack() {
+                            Button(action: {
+                                self.showCameraView.toggle()
+                            }){
+                                Image("camera")
+                            }
+                            // MARK: - 풀스크린하려면 .fullScreenCover 해야함.. .sheet 말고..
+                            
+                            .fullScreenCover(isPresented: $showCameraView, content: {
+                                ImagePicker(image: $selectedImage, isActive: $showCameraView)
+                                    .edgesIgnoringSafeArea(.all)
+                            })
+                            
+                            Spacer()
+                            Image("instagramLogoWhite").resizable().aspectRatio(contentMode: .fit)
+                                .frame(width: 105)
+                            Spacer()
+                            Image("dm")
+                            
+                            
+                            
+                        }
+                        .padding(.leading)
+                        .padding(.trailing)
+                        .frame(width: UIScreen.main.bounds.width)
+                        
+                    }//.background(.white)
+                    
                 }
-                .onPreferenceChange(ScrollOffsetKey.self) {
-                    _ in
-                }
-                .background(.clear)
-  
+            }.hideNavBarOnSwipe(hideNavBar)
         }
     }
     
     
     private var scrollObservableView: some View {
-      
+        
         GeometryReader { proxy in
             let offsetY = proxy.frame(in: .global).origin.y
             Color.clear
@@ -95,7 +115,7 @@ struct FeedView: View {
         static var defaultValue: CGFloat = .zero
         static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
             // MARK: - 내부적으로 뭔가 잘못되있는거 수정함
-
+            
             if value == 0 {
                 value += nextValue()
             }
@@ -188,9 +208,6 @@ struct ListView: View {
                        // Image(.heart)
                         Image(isHeartPressed ? "heart.fill" : "heart")
                             .frame(width: 25,height: 20)
-//                        .scaleEffect(1.5)
-//                            .foregroundColor(isHeartPressed ? .red : .black)
-                            
                     }
                     Button(action: {
                         isModalPresented.toggle()
@@ -198,6 +215,7 @@ struct ListView: View {
                         Image(.comment)
                     }
                     .bottomSheet(isPresented: $isModalPresented) {
+                        // TODO: - 나중에 게시물 아이디라던지 값 전달해서 쿼리로 조회.. 현재는없음
                         CommentView()
                             .frame(maxHeight: UIScreen.main.bounds.height)
                             .cornerRadius(10)

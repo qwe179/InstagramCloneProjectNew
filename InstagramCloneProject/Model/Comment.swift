@@ -7,8 +7,12 @@
 
 import Foundation
 import SwiftUI
-struct Comment {
+struct Comment: Equatable {
     var author: String
     var comment: String
     var location: String?
+    var Date: String
+    var profile: URL?
+    var isHeart: Bool
+    var numberOfLike: Int
 }

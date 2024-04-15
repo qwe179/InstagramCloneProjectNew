@@ -15,7 +15,6 @@ class ImagePickerCoordinator: NSObject, UIImagePickerControllerDelegate,UINaviga
     init(image: Binding<UIImage>, isActive: Binding<Bool>) {
         _image = image
         _isActive = isActive
-    
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
