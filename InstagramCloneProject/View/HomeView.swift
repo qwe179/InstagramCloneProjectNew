@@ -18,11 +18,11 @@ struct HomeView: View {
         ZStack(){
             NavigationView{
                 TabView {
-                    FeedView().tabItem { Image("home") }.tag(1)
-                    ExploreView().tabItem { Image("Search") }.tag(2)
-                    NewBoardView().tabItem { Image("add_rec") }.tag(3)
-                    LikeView().tabItem { Image("heart") }.tag(4)
-                    MyView().tabItem { Image("Oval") }.tag(5)
+                    FeedView().tabItem { Image("home") }.tag(0)
+                    ExploreView().tabItem { Image("Search") }.tag(1)
+                    NewBoardView().tabItem { Image("add_rec") }.tag(2)
+                    LikeView().tabItem { Image("heart") }.tag(3)
+                    MyView().tabItem { Image("Oval") }.tag(4)
                 }
 //                // MARK: - 툴바 순서 유의...
 //                .toolbar {

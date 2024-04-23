@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct FirstView: View {
     @State private var isToggled = false
     
@@ -40,6 +41,7 @@ struct FirstView: View {
                 Spacer()
             }       
             .frame(maxWidth: .infinity)
+            
         }
       }
     }

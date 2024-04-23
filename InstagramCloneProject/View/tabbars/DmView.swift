@@ -20,6 +20,7 @@ struct DmView: View {
     @State var text: String = ""
     @State var showMessage = false
     @State var isEnable: Bool = false
+    @State var isEditing: Bool = false //쓰진않음 
     //    @State private var isSendDm: Bool = false
     
     
@@ -45,7 +46,7 @@ struct DmView: View {
                     detents = .large
                     
                 }, label: {
-                    SearchBar(text: $searchText,isEnable: $isEnable)
+                    SearchBar(text: $searchText,isEnable: $isEnable, isEditing: $isEditing,isCancelButton: $showsCancelButton)
                     
                 })
                 .padding(.top)
@@ -270,11 +271,12 @@ struct FullDmView: View {
     @Binding var showMessage: Bool
     @State private var opacity: Double = 0
     @State var isEnable: Bool = true
+    @State var isEditing: Bool = false
     
     var body: some View {
         VStack {
             HStack {
-                SearchBar(text: $searchText,isEnable : $isEnable)
+                SearchBar(text: $searchText,isEnable : $isEnable, isEditing: $isEditing, isCancelButton: $showsCancelButton)
                 Button(action: {
                     withAnimation {
                         detents = .medium
@@ -456,68 +458,7 @@ struct DmCollectionView: View {
 
 
 
-// MARK: - 서치바
 
-struct SearchBar: UIViewRepresentable {
-    
-    @Binding var text: String
-    @Binding var isEnable: Bool
-    class Coordinator: NSObject, UISearchBarDelegate {
-        @Binding var text: String
-        @Binding var isEnable: Bool
-        init(text: Binding<String>,isEnable: Binding<Bool>) {
-            _text = text
-            _isEnable = isEnable
-        }
-        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-            text = searchText
-        }
-        func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//            searchBar.setShowsCancelButton(true, animated: true)
-            //searchBar.showsCancelButton = false
-        }
-        
-        func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-//            print(#function)
-//            searchBar.setShowsCancelButton(false, animated: true)
-        }
-        func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-//            searchBar.setShowsCancelButton(false, animated: true)
-//            searchBar.showsCancelButton = false
-            return true
-        }
-        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//            searchBar.showsCancelButton = false
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            
-        }
-        
-    }
-    
-    func makeCoordinator() -> SearchBar.Coordinator {
-        return Coordinator(text: $text,isEnable: $isEnable)
-    }
-    func makeUIView(context: UIViewRepresentableContext<SearchBar>) -> UISearchBar {
-        let searchBar = UISearchBar(frame: .zero)
-        searchBar.delegate = context.coordinator
-        searchBar.searchBarStyle = .minimal
-        searchBar.placeholder = "검색"
-        searchBar.showsCancelButton = false
-        if context.coordinator.isEnable == false {
-            searchBar.isUserInteractionEnabled = false
-        }
-    
-        //서치바 취소버튼 문구 바꾸기!!
-        searchBar.setValue("취소", forKey: "cancelButtonText")
-    
-        return searchBar
-    }
-    func updateUIView(_ uiView: UISearchBar, context: UIViewRepresentableContext<SearchBar>) {
-        uiView.text = text
-    }
-    
-    
-}
 
 
 // MARK: - 모달..컨트롤러..근데안씀

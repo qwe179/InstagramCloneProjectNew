@@ -9,7 +9,7 @@ import SwiftUI
 import BriefPagingControl
 import Kingfisher
 import SwiftUIModal
-@_spi(Advanced) import SwiftUIIntrospect
+//@_spi(Advanced) import SwiftUIIntrospect
 
 
 struct FeedView: View {
@@ -43,6 +43,7 @@ struct FeedView: View {
                     }
                     
                 }.listStyle(PlainListStyle())
+                
                     .refreshable {
                         //NotificationCenter.default.post(name: .customEvent, object: nil)
                         do {

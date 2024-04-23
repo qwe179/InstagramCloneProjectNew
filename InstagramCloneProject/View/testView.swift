@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SwiftUIIntrospect
+//import SwiftUIIntrospect
 
 struct ContentView2: View {
     @StateObject private var viewModel: ViewModel = ViewModel()
@@ -167,10 +167,10 @@ struct ContentView2: View {
                     }.refreshable {
                         
                     }
-                    .introspect(.scrollView, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { sv in
-                        sv.verticalScrollIndicatorInsets.top = 400
-                        
-                    }
+//                    .introspect(.scrollView, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { sv in
+//                        sv.verticalScrollIndicatorInsets.top = 400
+//                        
+//                    }
                     .onPreferenceChange(ScrollOffsetKey.self) {
                         v1 in
                         print("v1:\(v1)")
@@ -201,10 +201,10 @@ struct ContentView2: View {
                     }.refreshable {
                         
                     }
-                    .introspect(.scrollView, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { sv in
-                        sv.verticalScrollIndicatorInsets.top = 400
-                        
-                    }
+//                    .introspect(.scrollView, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { sv in
+//                        sv.verticalScrollIndicatorInsets.top = 400
+//                        
+//                    }
                     .onPreferenceChange(ScrollOffsetKey.self) {
                         v1 in
                         print("v2:\(v1)")
@@ -234,10 +234,10 @@ struct ContentView2: View {
                     }.refreshable {
                         
                     }
-                    .introspect(.scrollView, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { sv in
-                        sv.verticalScrollIndicatorInsets.top = 400
-                        
-                    }
+//                    .introspect(.scrollView, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { sv in
+//                        sv.verticalScrollIndicatorInsets.top = 400
+//                        
+//                    }
                     .onPreferenceChange(ScrollOffsetKey.self) {
                         v1 in
                         print("v3:\(v1)")
