@@ -36,6 +36,7 @@ struct ExploreGrid: View {
             case .feed(let video, let url): 
                 break
             }
+           // imageCount = 3
             if tmp.count >= imageCount {
                 layoutImgStrings.append(tmp)
                 tmp.removeAll()

@@ -40,6 +40,7 @@ struct FeedView: View {
                         ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 }, user: feedManager.feed[count])
                             .listRowInsets(EdgeInsets())
                             .listRowSeparator(.hidden)
+                    
                     }
                     
                 }.listStyle(PlainListStyle())
@@ -159,7 +160,9 @@ struct ListView: View {
     @State private var isModalPresented = false
     @State private var isDmPressed = false
     @State private var isHeartPressed = false
-    @State private var isSavePressed = false
+    @State var isSavePressed = false
+    @State var isSettingPresent = false
+    @State var isSavePresent = false
     @State private var settingsDetent = false
     @State private var detents: PresentationDetent = .medium
     @State private var temp = 0
@@ -186,8 +189,20 @@ struct ListView: View {
                     }
                 }
                 Spacer()
-                Image(.moreIcon)
+                Button(action: {
+                    isSettingPresent.toggle()
+                }){
+                    Image(.moreIcon)
+                        //.resizable()
+                       // .frame(width:30,height:30)
+                }
+                .contentShape(Rectangle())
+                .sheet(isPresented: $isSettingPresent, content: {
+                    SettingView()
+                        .presentationDetents([.height(500),.height(500)])
+                })
             }.padding()
+               
             VStack {
                 TabView(selection: $tabIndex){
                         ForEach(imageUrls.indices,id: \.self){ index in
@@ -253,13 +268,17 @@ struct ListView: View {
               
                     Spacer()
                     Button(action: { 
-                        isSavePressed.toggle()
+                        isSavePressed = true
+                        isSavePresent.toggle()
                     }){
                         Image(isSavePressed ? "save.fill" : "Save")
                             .frame(width: 10,height: 10)
-                       // Image(.save)
-                        //Image("Save")
                     }
+                    .sheet(isPresented: $isSavePresent, content: {
+                        SaveView(isSavePressed: $isSavePressed, isSavePresent: $isSavePresent, imageURL: imageUrls[0])
+                            .presentationDetents([.height(300),.large])
+
+                    })
                 }.padding(.leading)
                  .padding(.trailing)
                  .buttonStyle(PlainButtonStyle())
@@ -276,7 +295,7 @@ struct ListView: View {
                 }
                 HStack{
                     Text("좋아요")
-                    Text("\(user.numberOfLike)개")
+                    Text(isHeartPressed ? "\(user.numberOfLike+1)개" : "\(user.numberOfLike)개")
                     
                     Spacer()
                 }.padding(.leading)
@@ -291,6 +310,7 @@ struct ListView: View {
         }.onAppear{
            // imageUrls = one.imageURLs.compactMap { $0 }
         }
+        
     }
 }
 
