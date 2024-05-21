@@ -29,7 +29,7 @@ struct MyView: View {
             ScrollView {
                 VStack {
                     // MARK: - 프로필, 게시판,팔로워,팔로잉
-                    HStack(spacing:50) {
+                    HStack(spacing:40) {
                         Button {
                             
                         } label: {

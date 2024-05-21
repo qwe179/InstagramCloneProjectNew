@@ -20,8 +20,8 @@ struct HomeView: View {
                 TabView {
                     FeedView().tabItem { Image("home") }.tag(0)
                     ExploreView().tabItem { Image("Search") }.tag(1)
-                    NewBoardView().tabItem { Image("add_rec") }.tag(2)
-                    LikeView().tabItem { Image("heart") }.tag(3)
+                    NewBoardView().tabItem { Image("Newphoto") }.tag(2)
+                    ReelsView().tabItem { Image("Reel") }.tag(3)
                     MyView().tabItem { Image("Oval") }.tag(4)
                 }
 //                // MARK: - 툴바 순서 유의...
