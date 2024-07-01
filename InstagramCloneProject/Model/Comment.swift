@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 struct Comment: Equatable {
     var author: String
     var comment: String

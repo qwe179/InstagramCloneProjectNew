@@ -169,17 +169,11 @@ struct SearchBar: UIViewRepresentable {
                 searchBar.setShowsCancelButton(false, animated: true)
                
             }
-
-//            print(#function)
-//            searchBar.setShowsCancelButton(false, animated: true)
         }
         func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-//            searchBar.setShowsCancelButton(false, animated: true)
-//            searchBar.showsCancelButton = false
             return true
         }
         func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//            searchBar.showsCancelButton = false
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             
         }

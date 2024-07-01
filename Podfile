@@ -7,5 +7,5 @@ target 'InstagramCloneProject' do
 
   # Pods for InstagramCloneProject
 #pod 'FlexiblePageControl'
-pod 'Kingfisher', '~> 7.0'
+#pod 'Kingfisher', '~> 7.0'
 end

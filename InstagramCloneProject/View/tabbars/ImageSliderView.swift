@@ -23,7 +23,6 @@ struct ImageSliderView: View {
                         Image(images[index])
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                        //   .clipShape(Rectangle())
                             .frame(width: UIScreen.main.bounds.width)
                     }.background(.red)
                 }
@@ -35,7 +34,6 @@ struct ImageSliderView: View {
                     config.spacing = 10
                     config.currentIndicatorColor = .blue
                     config.indicatorColor = .black.opacity(0.15)
-                   // config.numberOfMainIndicators = .five
                     config.hidesForSinglePage = true
                     config.animation = .snappy
                 }

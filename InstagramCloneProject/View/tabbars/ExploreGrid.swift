@@ -8,6 +8,7 @@
 import SwiftUI
 import Kingfisher
 import AVKit
+import NukeUI
 
 struct ExploreGrid: View {
 
@@ -152,13 +153,23 @@ struct Layout1: View {
                     if video == true {
                         
                     } else {
-                        
-                        KFImage(URL(string: url)!)
-                            .resizable()
-                            .frame(width: height, height: height)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                    .resizable()
+                                    .frame(width: height, height: height)
+                                    .scaledToFill()
+                                   
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                             .onAppear {
-                                print("내부 이미지url : ",url)
+                                print("height:",height)
+//                                print("내부 이미지url : ",url)
                             }
                         
                     }
@@ -206,10 +217,19 @@ struct Layout2: View {
                     if video == true {
 
                     } else {
-                        KFImage(URL(string:url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                    .resizable()
+                                    .frame(width: smallItemWidth, height: smallItemWidth)
+                                    .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
 
                 }
@@ -217,10 +237,19 @@ struct Layout2: View {
                     if video == true {
 
                     } else {
-                        KFImage(URL(string:url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                    .resizable()
+                                    .frame(width: smallItemWidth, height: smallItemWidth)
+                                    .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
 
                 }
@@ -230,10 +259,19 @@ struct Layout2: View {
                 if video == true {
 
                 } else {
-                    KFImage(URL(string: url)!)
-                        .resizable()
-                        .frame(width: height, height: height)
-                        .scaledToFill()
+                    LazyImage(url: URL(string: url)!)
+                    { state in
+                        if let image = state.image {
+                            image
+                                .resizable()
+                                .frame(width: height, height: height)
+                                .scaledToFill()
+                        } else if state.error != nil {
+                            Color.clear // Indicates an error
+                        } else {
+                            Color.clear // Acts as a placeholder
+                        }
+                    }
                 }
 
             }
@@ -271,10 +309,19 @@ struct Layout3: View {
                 if video == true {
 
                 } else {
-                    KFImage(URL(string:url)!)
-                        .resizable()
-                        .frame(width: height, height: height)
-                        .scaledToFill()
+                    LazyImage(url: URL(string: url)!)
+                    { state in
+                        if let image = state.image {
+                            image
+                            .resizable()
+                            .frame(width: height, height: height)
+                            .scaledToFill()
+                        } else if state.error != nil {
+                            Color.clear // Indicates an error
+                        } else {
+                            Color.clear // Acts as a placeholder
+                        }
+                    }
                 }
 
             }
@@ -286,10 +333,19 @@ struct Layout3: View {
                     if video == true {
 
                     } else {
-                        KFImage(URL(string:url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                .resizable()
+                                .frame(width: smallItemWidth, height: smallItemWidth)
+                                .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
 
                 }
@@ -297,10 +353,19 @@ struct Layout3: View {
                     if video == true {
 
                     } else {
-                        KFImage(URL(string: url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                .resizable()
+                                .frame(width: smallItemWidth, height: smallItemWidth)
+                                .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
 
                 }
@@ -356,10 +421,19 @@ struct Layout4: View {
                         
                     }
                     else {
-                        KFImage(URL(string: url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                .resizable()
+                                .frame(width: smallItemWidth, height: smallItemWidth)
+                                .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
                 }
                 if case let .feed(video, url) = imgStrings[2].imageInfo[0]  {
@@ -367,10 +441,19 @@ struct Layout4: View {
                         
                     }
                     else {
-                        KFImage(URL(string: url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                .resizable()
+                                .frame(width: smallItemWidth, height: smallItemWidth)
+                                .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
                 }
             }
@@ -380,10 +463,19 @@ struct Layout4: View {
                         
                     }
                     else {
-                        KFImage(URL(string: url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                .resizable()
+                                .frame(width: smallItemWidth, height: smallItemWidth)
+                                .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
                 }
                 if case let .feed(video, url) = imgStrings[4].imageInfo[0]  {
@@ -391,10 +483,19 @@ struct Layout4: View {
                         
                     }
                     else {
-                        KFImage(URL(string: url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                .resizable()
+                                .frame(width: smallItemWidth, height: smallItemWidth)
+                                .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
                 }
             }
@@ -436,10 +537,19 @@ struct Layout5: View {
                         
                     }
                     else {
-                        KFImage(URL(string: url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                .resizable()
+                                .frame(width: smallItemWidth, height: smallItemWidth)
+                                .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
                 }
                 if case let .feed(video, url) = imgStrings[1].imageInfo[0]  {
@@ -447,10 +557,19 @@ struct Layout5: View {
                         
                     }
                     else {
-                        KFImage(URL(string: url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                .resizable()
+                                .frame(width: smallItemWidth, height: smallItemWidth)
+                                .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
                 }
             }
@@ -460,10 +579,19 @@ struct Layout5: View {
                         
                     }
                     else {
-                        KFImage(URL(string: url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                .resizable()
+                                .frame(width: smallItemWidth, height: smallItemWidth)
+                                .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
                 }
                 if case let .feed(video, url) = imgStrings[3].imageInfo[0]  {
@@ -471,10 +599,19 @@ struct Layout5: View {
                         
                     }
                     else {
-                        KFImage(URL(string: url)!)
-                            .resizable()
-                            .frame(width: smallItemWidth, height: smallItemWidth)
-                            .scaledToFill()
+                        LazyImage(url: URL(string: url)!)
+                        { state in
+                            if let image = state.image {
+                                image
+                                .resizable()
+                                .frame(width: smallItemWidth, height: smallItemWidth)
+                                .scaledToFill()
+                            } else if state.error != nil {
+                                Color.clear // Indicates an error
+                            } else {
+                                Color.clear // Acts as a placeholder
+                            }
+                        }
                     }
                 }
             }

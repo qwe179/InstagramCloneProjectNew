@@ -24,40 +24,6 @@ struct HomeView: View {
                     ReelsView().tabItem { Image("Reel") }.tag(3)
                     MyView().tabItem { Image("Oval") }.tag(4)
                 }
-//                // MARK: - 툴바 순서 유의...
-//                .toolbar {
-//                    ToolbarItem(placement: .navigation) {
-//                        VStack {
-//                            HStack() {
-//                                Button(action: {
-//                                    self.showCameraView.toggle()
-//                                }){
-//                                    Image("camera")
-//                                }
-//                                // MARK: - 풀스크린하려면 .fullScreenCover 해야함.. .sheet 말고..
-//
-//                                .fullScreenCover(isPresented: $showCameraView, content: {
-//                                    ImagePicker(image: $selectedImage, isActive: $showCameraView)
-//                                        .edgesIgnoringSafeArea(.all)
-//                                })
-//                                
-//                                Spacer()
-//                                Image("instagramLogoWhite").resizable().aspectRatio(contentMode: .fit)
-//                                    .frame(width: 105)
-//                                Spacer()
-//                                Image("dm")
-//                               
-//                              
-//                              
-//                            }
-//                            .padding(.leading)
-//                            .padding(.trailing)
-//                            .frame(width: UIScreen.main.bounds.width)
-//                            
-//                        }//.background(.white)
-//                        
-//                    }
-//                }.hideNavBarOnSwipe(hideNavBar)
             }
             
         }.navigationBarHidden(true)
@@ -66,10 +32,6 @@ struct HomeView: View {
             }
     }
 }
-
-
-
-
 
 #Preview {
     HomeView()

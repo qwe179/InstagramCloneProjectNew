@@ -9,8 +9,8 @@ import SwiftUI
 import BriefPagingControl
 import Kingfisher
 import SwiftUIModal
-//@_spi(Advanced) import SwiftUIIntrospect
-
+import Nuke
+import NukeUI
 
 struct FeedView: View {
     @ObservedObject var storyManager = StoryManager.shared
@@ -33,7 +33,7 @@ struct FeedView: View {
                         scrollObservableView
                         CollectionView().listRowInsets(EdgeInsets()).listRowSeparator(.hidden)
                     }.listRowInsets(EdgeInsets())
-                    // MARK: - 인간수만큼 생성
+                    // MARK: - 사람수만큼 생성
                     // imageUrls = one.
                     ForEach(0...feedManager.feedCounts - 1, id: \.self) { count in
                         //  ListView(imageUrls: feedManager.feed[count].imageURLs.compactMap { $0 })
@@ -46,7 +46,6 @@ struct FeedView: View {
                 }.listStyle(PlainListStyle())
                 
                     .refreshable {
-                        //NotificationCenter.default.post(name: .customEvent, object: nil)
                         do {
                             try await Task.sleep(nanoseconds: 1_000_000_000)
                             storyManager.fetchData()
@@ -81,9 +80,6 @@ struct FeedView: View {
                                 .frame(width: 105)
                             Spacer()
                             Image("dm")
-                            
-                            
-                            
                         }
                         .padding(.leading)
                         .padding(.trailing)
@@ -175,12 +171,19 @@ struct ListView: View {
     var body: some View {
         VStack {
             HStack {
-                KFImage(user.profilePhoto)
-                    .cancelOnDisappear(true) //셀이 화면 밖에 있을 때는 다운로드 취소
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 32,height: 32)
-                    .clipShape(Circle())
+                LazyImage(url: user.profilePhoto)
+                { state in
+                    if let image = state.image {
+                        image.resizable().aspectRatio(contentMode: .fill)
+                    } else if state.error != nil {
+                        Color.clear // Indicates an error
+                    } else {
+                        Color.clear // Acts as a placeholder
+                    }
+                }
+                .frame(width: 32,height: 32)
+                .clipShape(Circle())
+
                 VStack(alignment:.leading,spacing: 0){
                     Text(user.name)
                     HStack {
@@ -193,8 +196,6 @@ struct ListView: View {
                     isSettingPresent.toggle()
                 }){
                     Image(.moreIcon)
-                        //.resizable()
-                       // .frame(width:30,height:30)
                 }
                 .contentShape(Rectangle())
                 .sheet(isPresented: $isSettingPresent, content: {
@@ -206,11 +207,20 @@ struct ListView: View {
             VStack {
                 TabView(selection: $tabIndex){
                         ForEach(imageUrls.indices,id: \.self){ index in
-                                KFImage(imageUrls[index])
-                                    .cancelOnDisappear(true) //셀이 화면 밖에 있을 때는 다운로드 취소
-//                                Image(images[index])
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
+                            LazyImage(url: imageUrls[index])
+                            { state in
+                                if let image = state.image {
+                                    image.resizable().aspectRatio(contentMode: .fill)
+                                } else if state.error != nil {
+                                    Color.clear // Indicates an error
+                                } else {
+                                    Color.clear // Acts as a placeholder
+                                }
+                            }
+                             //   KFImage(imageUrls[index])
+                             //       .cancelOnDisappear(true) //셀이 화면 밖에 있을 때는 다운로드 취소
+                                 //   .resizable()
+                                    //.aspectRatio(contentMode: .fit)
                                     .frame(minHeight: 400)
                                
                         }
@@ -257,13 +267,7 @@ struct ListView: View {
                     .sheet(isPresented: $isDmPressed, content: {
                         DmView(detents: $detents)
                             .presentationDetents([.medium,.large], selection: $detents)
-                            
-                        //DmView()
                             .cornerRadius(10)
-                           // .presentationDetents([.medium,.large])
-                          //  .presentationDetents(isLargeDetent ? [.large,.large] : [.medium,.large])
-                            
-
                     })
               
                     Spacer()
@@ -288,7 +292,6 @@ struct ListView: View {
                         config.spacing = 10
                         config.currentIndicatorColor = .blue
                         config.indicatorColor = .black.opacity(0.15)
-                       // config.numberOfMainIndicators = .five
                         config.hidesForSinglePage = true
                         config.animation = .snappy
                     }
@@ -308,13 +311,9 @@ struct ListView: View {
             Divider()
             
         }.onAppear{
-           // imageUrls = one.imageURLs.compactMap { $0 }
         }
-        
     }
 }
-
-
 
 
 #Preview {
@@ -332,19 +331,25 @@ struct CollectionView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHGrid(rows: columns, spacing: 20) {
                     ForEach(0..<storyManager.storyCount, id: \.self) { index in
-                        //UserView(title: "\(item)")
                         VStack {
                             VStack {
-                                KFImage(storyManager.stories[index].profilePhoto)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .clipShape(Circle())
-                                    .overlay{
-                                        Circle().stroke(.white, lineWidth: 8)
+                                LazyImage(url: storyManager.stories[index].profilePhoto)
+                                { state in
+                                    if let image = state.image {
+                                        image.resizable().aspectRatio(contentMode: .fill)
+                                    } else if state.error != nil {
+                                        Color.clear // Indicates an error
+                                    } else {
+                                        Color.clear // Acts as a placeholder
                                     }
-                                    .overlay {
-                                        Circle().stroke(  LinearGradient(gradient: Gradient(colors: [.red, .yellow, .purple]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
-                                    }
+                                }
+                                .clipShape(Circle())
+                                .overlay{
+                                    Circle().stroke(.white, lineWidth: 8)
+                                }
+                                .overlay {
+                                    Circle().stroke(  LinearGradient(gradient: Gradient(colors: [.red, .yellow, .purple]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
+                                }
                             }
                             .frame(width: 62, height: 62)
                             VStack {
@@ -352,8 +357,6 @@ struct CollectionView: View {
                             }
                             .frame(height: 14)
                         }
-                        
-                        
                     }
                 }
                 .padding()
@@ -362,9 +365,6 @@ struct CollectionView: View {
             }
             Divider()
         }       .onAppear {
-    
-          //  UIScrollView.appearance().bounces = false
-        
         }
   
     }

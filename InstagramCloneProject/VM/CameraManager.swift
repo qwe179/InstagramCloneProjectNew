@@ -29,11 +29,7 @@ class CameraManager: ObservableObject {
         } else {
             //TODO: 카메라 접근 권한 거부 상태인 경우
         }
-        // MARK: - 전면,후면,마이크
-//                AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .front)
-//                AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
-//                AVCaptureDevice.default(.builtInMicrophone, for: AVMediaType.audio, position: .unspecified)
-        
+        // MARK: - 전면,후면,마이크        
         return true
     }
     

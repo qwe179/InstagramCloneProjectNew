@@ -11,17 +11,10 @@ import AVKit
 struct ReelsView: View {
     @ObservedObject var reelsViewModel: ReelsViewModel = ReelsViewModel()
     @State var currentReel = ""
-//    @State var reels = MediaFileJSON.map { item -> Reel in
-//        guard let url = URL(string: item.url) else {return Reel(player: nil, mediafile: item) }
-//        let player = AVPlayer(url: url)
-//        return Reel(player: player, mediafile: item)
-//    }
-    
     var body: some View {
         GeometryReader{ proxy in
             let size = proxy.size
             TabView(selection: $currentReel) {
-//                ForEach($reels) { $reels in
                 ForEach(0..<reelsViewModel.reels.count, id: \.self) { index in
                     ReelsPlayer(reel: reelsViewModel.reels[index],currentReel: $currentReel)
                         .frame(

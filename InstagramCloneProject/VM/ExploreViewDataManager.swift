@@ -13,14 +13,10 @@ class ExploreViewDataManager: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        // 실제로는 네트워크 요청을 보내서 유저 정보를 가져와야 합니다.
-        // 여기서는 임의의 데이터를 사용합니다.
         fetchUserData()
     }
     
     func fetchUserData() {
-        // 실제로는 네트워크 요청을 보내서 유저 정보를 가져오는 로직이 들어갑니다.
-        // 여기서는 임의의 데이터를 생성하여 사용합니다.
         let users = [
                     ExploreViewUser(id: 0, name: "Comong", imageInfo: [.adv(video: false, url: "https://media.istockphoto.com/id/1417064745/ko/%EC%82%AC%EC%A7%84/%EB%B0%94%EB%8B%A4-%EA%B7%BC%EC%B2%98%EC%97%90%EC%84%9C-%EC%85%80%EC%B9%B4%EB%A5%BC%ED%95%98%EB%8A%94-%EC%BB%A4%ED%94%8C%EC%9D%98-%ED%81%B0-%EC%B4%AC%EC%98%81.jpg?s=2048x2048&w=is&k=20&c=OGWhjoICaCvzLBKqKbW6Pf5BJAnxYb2DhnYEOw4-H18=")]),
                      ExploreViewUser(id: 1, name: "Comong", imageInfo: [.feed(video: false, url: "https://images.unsplash.com/photo-1713453321322-28ef26986cc0?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")]),

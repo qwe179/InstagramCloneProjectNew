@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftUIIntrospect
 import Kingfisher
+import NukeUI
 
 struct ExploreView: View {
     @StateObject var viewModel = ViewModel()
@@ -91,15 +92,23 @@ struct ExploreView: View {
                             List((0..<20).filter({"\($0)".contains(self.searchText) || self.searchText.isEmpty}), id : \.self){ i in
                             
                                 HStack {
-                                    KFImage(URL(string:"https://media.istockphoto.com/id/157681198/ko/%EC%82%AC%EC%A7%84/%EB%AF%BC%EB%93%A4%EB%A0%88-seed.jpg?s=612x612&w=0&k=20&c=BtRA1Q24ICmHkRb6HS0tInJ1JQKAEiTm0dC1tBtfs5s="))
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .clipShape(Circle())
-                                        .overlay {
-                                            Circle().stroke(  LinearGradient(gradient: Gradient(colors: [.red, .yellow, .purple]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
+                                    LazyImage(url: URL(string:"https://media.istockphoto.com/id/157681198/ko/%EC%82%AC%EC%A7%84/%EB%AF%BC%EB%93%A4%EB%A0%88-seed.jpg?s=612x612&w=0&k=20&c=BtRA1Q24ICmHkRb6HS0tInJ1JQKAEiTm0dC1tBtfs5s="))
+                                    { state in
+                                        if let image = state.image {
+                                            image.resizable().aspectRatio(contentMode: .fill)
+                                        } else if state.error != nil {
+                                            Color.clear // Indicates an error
+                                        } else {
+                                            Color.clear // Acts as a placeholder
                                         }
-                                        .frame(width:70,height:70)
-                                        .listRowInsets(EdgeInsets())
+                                    }
+                                    .aspectRatio(contentMode: .fit)
+                                    .clipShape(Circle())
+                                    .overlay {
+                                        Circle().stroke(  LinearGradient(gradient: Gradient(colors: [.red, .yellow, .purple]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
+                                    }
+                                    .frame(width:70,height:70)
+                                    .listRowInsets(EdgeInsets())
                                     
                                     VStack {
                                         Text("id\(i)")
@@ -158,37 +167,21 @@ struct ExploreView: View {
                                 }
                                 //3.현재 서치뷰가 화면안에있고, 스크롤 올리는중
                                 if self.offset > -100 , viewModel.direct == .up{
-                                    print("현재 서치뷰가 화면안에있고, 스크롤 올리는중")
                                     let changedOffset = v1 - viewModel.originOffset
-                                    print("바뀔 오프셋:",changedOffset)
                                     self.offset = min(max(-100, changedOffset), 0)
                                 }
                                 //3.현재 서치뷰가 화면안에있고, 스크롤 내리는중
                                 if self.offset > -100 , viewModel.direct == .down{
-                                    print("현재 서치뷰가 화면안에있고, 스크롤 내리는중")
                                     let changedOffset = v1 - viewModel.originOffset
-                                    print("바뀔 오프셋:",changedOffset)
                                     self.offset = min(max(-100, changedOffset), 0)
                                 }
                                 //4.현재 서치뷰가 원위치에 있음
                                 if self.offset == 0 ,v1 < 47 {
-                                    print("현재 서치뷰가 원위치에 있음")
                                     viewModel.originOffset = v1
                                     let changedOffset = v1 - viewModel.originOffset
-                                    print("바뀔 오프셋:",changedOffset)
                                     self.offset = min(max(-100, changedOffset), 0)
                                 }
-                                print("viewModel.originOffset:",viewModel.originOffset)
-                                print("self.offset:",self.offset)
-                                print("viewModel.direct:",viewModel.direct)
-                                
                             }
-                        
-                            .onDisappear {
-                                print("사라진다")
-                                //    UIRefreshControl.appearance().bounds = CGRectMake(0, 50, 0, 0)
-                            }
-                        
                             .refreshable {
                                 do {
                                     try await Task.sleep(nanoseconds: 1_000_000_000)
